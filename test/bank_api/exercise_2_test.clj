@@ -9,7 +9,11 @@
 (use-fixtures :each fixtures/register-black-account)
 
 (deftest view-test
-  (testing "Exercise 2: View newly created account."
+  (testing "Exercise 2: Successfully view newly created account."
     (let [{:keys [status body]} (handler/app (mock/request :get (str "/account/" data/black-account-number)))]
       (is (= status 200))
-      (is (= body (json/write-str data/empty-black-account))))))
+      (is (= body (json/write-str data/empty-black-account)))))
+  (testing "Exercise 2: Fail to view unknown account."
+    (let [{:keys [status body]} (handler/app (mock/request :get (str "/account/" data/fake-account-number)))]
+      (is (= status 400))
+      (is (= body (format "No account associated with account-number %d." data/fake-account-number))))))

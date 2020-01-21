@@ -1,5 +1,5 @@
 (ns resources.test-data)
-;;TODO move to resources
+
 (def black-account-owner "Mr.Black")
 (def white-account-owner "Ms.White")
 (def black-account-number 0)
@@ -21,3 +21,31 @@
 (def rich-white-account (assoc empty-white-account :balance lots-of-money))
 (def super-rich-black-account (assoc empty-black-account :balance (* 2 lots-of-money)))
 (def super-rich-white-account (assoc empty-white-account :balance (* 2 lots-of-money)))
+
+(def black-audit-log [
+  {:sequence 3
+   :debit 123456789
+   :description "withdraw"}
+  {:sequence 2
+   :credit 123456789
+   :description (str "receive from " white-account-number)}
+  {:sequence 1
+   :debit 123456789
+   :description (str "sent to " white-account-number)}
+  {:sequence 0
+   :credit 123456789
+   :description "deposit"}])
+
+(def white-audit-log [
+  {:sequence 3
+   :debit 123456789
+   :description "withdraw"}
+  {:sequence 2
+   :debit 123456789
+   :description (str "sent to " black-account-number)}
+  {:sequence 1
+   :credit 123456789
+   :description (str "received from " black-account-number)}
+  {:sequence 0
+   :credit 123456789
+   :description "deposit"}])

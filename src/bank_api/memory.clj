@@ -20,3 +20,18 @@
   "returns nil if no account was found associated with the ID"
   [id]
   (get @open-accounts id))
+
+(defn push-to-log! ;;TODO careful of race condition
+  [{:keys [id debit credit description]}]
+  (let [account     (get-account id)
+        audit-log   (:audit-log account)
+        sequence    (count audit-log)
+        info        {:sequence sequence
+                     :description description}
+        transaction (if debit
+                      {:debit debit}
+                      {:credit credit})
+        new-record  (merge transaction info)
+        new-audit-log (conj audit-log new-record)
+        new-account (assoc account :audit-log new-audit-log)]
+    (mutate-account! id new-account)))
