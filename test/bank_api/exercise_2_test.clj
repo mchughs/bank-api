@@ -1,10 +1,10 @@
-(ns bank-api.exercise-2-test
+(ns exercise-2-test
   (:require [clojure.data.json :as json]
             [clojure.test :refer :all]
             [ring.mock.request :as mock]
             [bank-api.handler :as handler]
-            [resources.test-data :as data]
-            [resources.fixtures :as fixtures]))
+            [test-data :as data]
+            [fixtures :as fixtures]))
 
 (use-fixtures :each fixtures/register-black-account)
 

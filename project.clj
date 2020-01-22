@@ -1,6 +1,8 @@
 (defproject bank-api "0.1.0-SNAPSHOT"
   :description "Bank-API project for LemonPi."
   :min-lein-version "2.0.0"
+  :source-paths ["src" "resources"]
+  :test-paths ["test/bank_api"]
   :dependencies [[compojure "1.6.1"]
                  [hikari-cp "2.10.0"]
                  [org.clojure/clojure "1.10.0"]

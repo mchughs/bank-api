@@ -1,4 +1,4 @@
-(ns resources.test-data)
+(ns test-data)
 
 (def black-account-owner "Mr.Black")
 (def white-account-owner "Ms.White")
@@ -28,10 +28,10 @@
    :description "withdraw"}
   {:sequence 2
    :credit 123456789
-   :description (str "receive from " white-account-number)}
+   :description (str "received from #" white-account-number)}
   {:sequence 1
    :debit 123456789
-   :description (str "sent to " white-account-number)}
+   :description (str "sent to #" white-account-number)}
   {:sequence 0
    :credit 123456789
    :description "deposit"}])
@@ -42,10 +42,10 @@
    :description "withdraw"}
   {:sequence 2
    :debit 123456789
-   :description (str "sent to " black-account-number)}
+   :description (str "sent to #" black-account-number)}
   {:sequence 1
    :credit 123456789
-   :description (str "received from " black-account-number)}
+   :description (str "received from #" black-account-number)}
   {:sequence 0
    :credit 123456789
    :description "deposit"}])

@@ -53,7 +53,7 @@
             {:status 400 :body (format "The balance of an account cannot go as low as (%d)." new-balance)}
             (let [new-account-data (assoc account :balance new-balance)]
               (memory/mutate-account! id new-account-data)
-              (memory/push-to-log! {:id id :debit amount :description (if transfer-account (str "send to #" transfer-account) "withdraw")})
+              (memory/push-to-log! {:id id :debit amount :description (if transfer-account (str "sent to #" transfer-account) "withdraw")})
               (json/write-str (hide-log new-account-data)))))
         {:status 400 :body (format "No account associated with account-number %s." id)}))))
 
@@ -79,7 +79,9 @@
 (defn get-log [{:keys [route-params]}]
   (let [{:keys [id]} route-params
         {:keys [audit-log]} (memory/get-account id)]
-    (json/write-str (reverse audit-log))))
+    (if audit-log
+      (json/write-str (reverse audit-log))
+      {:status 400 :body (format "No account associated with account-number %s." id)})))
 
 (defroutes app-routes
   (POST "/account" [] create-account)

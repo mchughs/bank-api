@@ -1,8 +1,8 @@
-(ns resources.fixtures
+(ns fixtures
   (:require [ring.mock.request :as mock]
             [bank-api.memory :as memory]
             [bank-api.handler :as handler]
-            [resources.test-data :as data]))
+            [test-data :as data]))
 
 (defn register-black-account [f]
   (handler/app (mock/request :post (str "/account?name=" data/black-account-owner)))
@@ -28,9 +28,9 @@
   (handler/app (mock/request :post (str "/account/" data/black-account-number "/deposit?amount=" data/lots-of-money)))
   (handler/app (mock/request :post (str "/account?name=" data/white-account-owner)))
   (handler/app (mock/request :post (str "/account/" data/white-account-number "/deposit?amount=" data/lots-of-money)))
-  (handler/app (mock/request :post (str "/account/" data/black-account-owner "/send?amount=" data/white-account-owner "&account-number=" data/lots-of-money)))
-  (handler/app (mock/request :post (str "/account/" data/white-account-owner "/send?amount=" data/black-account-owner "&account-number=" data/lots-of-money)))
-  (handler/app (mock/request :post (str "/account/" data/black-account-owner "/withdraw?amount=" data/lots-of-money)))
-  (handler/app (mock/request :post (str "/account/" data/white-account-owner "/withdraw?amount=" data/lots-of-money)))
+  (handler/app (mock/request :post (str "/account/" data/black-account-number "/send?amount=" data/lots-of-money "&account-number=" data/white-account-number)))
+  (handler/app (mock/request :post (str "/account/" data/white-account-number "/send?amount=" data/lots-of-money "&account-number=" data/black-account-number)))
+  (handler/app (mock/request :post (str "/account/" data/black-account-number "/withdraw?amount=" data/lots-of-money)))
+  (handler/app (mock/request :post (str "/account/" data/white-account-number "/withdraw?amount=" data/lots-of-money)))
   (f)
   (memory/blow-up-the-bank!))
