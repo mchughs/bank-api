@@ -13,6 +13,11 @@
     (let [response (handler/app (mock/request :get "/invalid"))]
       (is (= (:status response) 404)))))
 
+(deftest status-route
+  (testing "status route"
+    (let [response (handler/app (mock/request :get "/status"))]
+      (is (= (:status response) 200)))))
+
 (deftest create-test
   (testing "Exercise 1: Create second new account with unique account-number."
     (let [{:keys [status body]} (handler/app (mock/request :post (str "/account?name=" data/white-account-owner)))]

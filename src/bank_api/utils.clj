@@ -1,5 +1,6 @@
 (ns bank-api.utils
-  (:require [clojure.data.json :as json]))
+  (:require [clojure.data.json :as json]
+            [ring.util.response :as ring-response]))
 
 (defn- hide-log [account]
   (dissoc account :audit-log))
@@ -7,11 +8,8 @@
 (defn customer-safe-response [res]
   (-> res hide-log json/write-str))
 
-(defn bad-request [msg]
-  {:status 400 :body msg})
-
 (defn missing-account-response [id]
-  (bad-request (format "No account associated with account-number %s." id)))
+  (ring-response/bad-request (format "No account associated with account-number %s." id)))
 
 (defn append-log
   [{:keys [audit-log] :as account} {:keys [id debit credit description] :as log}]

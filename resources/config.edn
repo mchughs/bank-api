@@ -1,0 +1,2 @@
+{:port #or [#env PORT_ENV 3000]
+ :base-url #join ["http://localhost:" #ref [:port]]}

@@ -2,10 +2,11 @@
   (:require [bank-api.memory :as memory]
             bank-api.spec
             [bank-api.utils :as utils]
-            [clojure.spec.alpha :as s]))
+            [clojure.spec.alpha :as s]
+            [ring.util.response :as ring-response]))
 
 (defn- deposit-amount-invalid [amount]
-  (utils/bad-request (format "The amount (%d) cannot be deposited into an account." amount)))
+  (ring-response/bad-request (format "The amount (%d) cannot be deposited into an account." amount)))
 
 (defn- deposit-success [{:keys [account amount id transfer-account]}]
   (let [balance          (+ (:balance account)
@@ -22,10 +23,10 @@
 ;---------------------------------------------------------------------------------------------------------------
 
 (defn- withdraw-amount-invalid [amount]
-  (utils/bad-request (format "The amount (%d) cannot be withdrawn from an account." amount)))
+  (ring-response/bad-request (format "The amount (%d) cannot be withdrawn from an account." amount)))
 
 (defn- withdraw-balance-invalid [balance]
-  (utils/bad-request (format "The balance of an account cannot go as low as (%d)." balance)))
+  (ring-response/bad-request (format "The balance of an account cannot go as low as (%d)." balance)))
 
 (defn- withdraw-success [balance {:keys [account amount id transfer-account]}]
   (let [log              {:id id

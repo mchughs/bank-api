@@ -1,7 +1,8 @@
 (ns fixtures
-  (:require [ring.mock.request :as mock]
+  (:require [bank-api.core :as core]
             [bank-api.memory :as memory]
             [bank-api.handler :as handler]
+            [ring.mock.request :as mock]
             [test-data :as data]))
 
 (defn register-black-account [f]
@@ -34,3 +35,8 @@
   (handler/app (mock/request :post (str "/account/" data/white-account-number "/withdraw?amount=" data/lots-of-money)))
   (f)
   (memory/blow-up-the-bank!))
+
+(defn bootstrap-server [f]
+  (let [server (core/start-server)]
+    (f)
+    (core/stop-server server)))

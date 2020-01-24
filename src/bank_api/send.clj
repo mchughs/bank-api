@@ -1,13 +1,14 @@
 (ns bank-api.send
   (:require [bank-api.memory :as memory]
             [bank-api.transact :as transact]
-            [bank-api.utils :as utils]))
+            [bank-api.utils :as utils]
+            [ring.util.response :as ring-response]))
 
 (defn- invalid-ids? [sender-id receiver-id]
   (let [sender   (memory/get-account sender-id)
         receiver (memory/get-account receiver-id)]
     (cond
-      (= sender-id receiver-id) (utils/bad-request "Can't send money to own account.")
+      (= sender-id receiver-id) (ring-response/bad-request "Can't send money to own account.")
       (nil? sender)             (utils/missing-account-response sender-id)
       (nil? receiver)           (utils/missing-account-response receiver-id))))
 
