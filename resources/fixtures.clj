@@ -39,8 +39,5 @@
 (defn bootstrap-server [f]
   (let [server (core/start-server)]
     (f)
+    (memory/blow-up-the-bank!)
     (core/stop-server server)))
-
-(defn blow-up-the-bank [f]
-  (f)
-  (memory/blow-up-the-bank!))

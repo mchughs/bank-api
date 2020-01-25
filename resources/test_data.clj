@@ -1,5 +1,7 @@
 (ns test-data)
 
+(def concurrency 1000)
+
 (def black-account-owner "Mr.Black")
 (def white-account-owner "Ms.White")
 (def black-account-number 0)
