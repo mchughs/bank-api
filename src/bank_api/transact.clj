@@ -54,7 +54,7 @@
         amount (Integer. amount)]
     (if-not (s/valid? :bank-api.spec/transaction-amount amount)
       (fail-res-f amount)
-      (if-let [account (memory/get-account id)]
+      (if-let [account (memory/get-account id)] ;; TODO Theere should be no space between inspecting the current account and writing the new account.
         (process-f {:account account :amount amount :id id :transfer-account transfer-account})
         (utils/missing-account-response id)))))
 

@@ -42,6 +42,21 @@
     (memory/blow-up-the-bank!)
     (core/stop-server server)))
 
+(defn bootstrap-and-create-account [f]
+  (let [server (core/start-server)]
+    (handler/app (mock/request :post (str "/account?name=" data/black-account-owner)))
+    (f)
+    (memory/blow-up-the-bank!)
+    (core/stop-server server)))
+
+(defn bootstrap-and-enrich-account [f]
+  (let [server (core/start-server)]
+    (handler/app (mock/request :post (str "/account?name=" data/black-account-owner)))
+    (handler/app (mock/request :post (str "/account/" data/black-account-number "/deposit?amount=" data/concurrency)))
+    (f)
+    (memory/blow-up-the-bank!)
+    (core/stop-server server)))
+
 (defn bootstrap-and-initialize [f]
   (let [server (core/start-server)]
     (dotimes [id data/concurrency]
