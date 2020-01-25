@@ -36,10 +36,13 @@
     (let [{:keys [status body]} (send-money {:from data/fake-account-number :to data/black-account-number})]
       (is (= status 400))
       (is (= body (format "No account associated with account-number %d." data/fake-account-number)))))
-  (testing "Exercise 5: Fail to send to unknown account."
+  (testing "Exercise 5: Fail to send to unknown account. Sender shouldn't lose any money."
     (let [{:keys [status body]} (send-money {:from data/black-account-number :to data/fake-account-number})]
       (is (= status 400))
-      (is (= body (format "No account associated with account-number %d." data/fake-account-number))))))
+      (is (= body (format "No account associated with account-number %d." data/fake-account-number))))
+      (let [{:keys [status body]} (handler/app (mock/request :get (str "/account/" data/black-account-number)))]
+        (is (= status 200))
+        (is (= body (json/write-str data/rich-black-account))))))
 
 (deftest self-send-test
   (testing "Exercise 5: Fail to send to own accont."

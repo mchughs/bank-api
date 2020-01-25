@@ -15,6 +15,8 @@
 (s/def ::balance nat-int?)
 (s/def ::name string?)
 
+
+(s/def ::customer-facing-account (s/keys :req-un [::name ::balance ::account-number]))
 (s/def ::account (s/keys :req-un [::name ::balance ::account-number ::audit-log]))
 
 (s/def ::transaction-amount pos-int?)

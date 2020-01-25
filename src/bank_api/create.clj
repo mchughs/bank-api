@@ -10,7 +10,7 @@
         account {:name           name
                  :balance        0
                  :audit-log      []
-                 :account-number @memory/free-account-number}]
+                 :account-number (memory/get-free-account-number)}]
     (if-not (s/valid? :bank-api.spec/account account)
       (ring-response/bad-request "There was a problem creating your account.")
       (do (memory/register-new-account! account)

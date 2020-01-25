@@ -32,7 +32,7 @@
       withdraw-res
       (process-deposit send-data withdraw-res))))
 
-(defn send-money [{:keys [route-params params]}] ;;TODO the sender will still lose money if their transaction fails. Expand test to catch this
+(defn send-money [{:keys [route-params params]}]
   (let [{:keys [id]} route-params
         {:keys [account-number amount]} params
         send-data {:id id

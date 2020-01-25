@@ -40,3 +40,7 @@
   (let [server (core/start-server)]
     (f)
     (core/stop-server server)))
+
+(defn blow-up-the-bank [f]
+  (f)
+  (memory/blow-up-the-bank!))
