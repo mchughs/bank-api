@@ -41,3 +41,14 @@
     (f)
     (memory/blow-up-the-bank!)
     (core/stop-server server)))
+
+(defn bootstrap-and-initialize [f]
+  (let [server (core/start-server)]
+    (dotimes [id data/concurrency]
+      (handler/app (mock/request :post (str "/account?name=" data/black-account-owner)))
+      (handler/app (mock/request :post (str "/account/" id "/deposit?amount=" data/lots-of-money))))
+    (dotimes [id data/concurrency]
+      (handler/app (mock/request :post (str "/account?name=" data/white-account-owner))))
+    (f)
+    (memory/blow-up-the-bank!)
+    (core/stop-server server)))

@@ -2,8 +2,6 @@
   (:require [aleph.http         :as http]
             [bank-api.core      :as core]
             bank-api.spec
-            [byte-streams       :as bs]
-            [clojure.data.json  :as json]
             [clojure.spec.alpha :as s]
             [clojure.test       :refer :all]
             [clj-gatling.core   :as clj-gatling]
@@ -20,12 +18,12 @@
 (defn- drain-account [{:keys [user-id]}]
   (let [{:keys [body status]} @(http/post (str core/base-url "/account/" user-id "/withdraw?amount=" (inc user-id)) ;; user-id starts from 0 and you cant withdraw 0 dollars
                                           {:throw-exceptions false})
-        {:keys [balance]} (->> body bs/to-string json/read-str (map utils/k-str->k-keyword) (into {}))]
+        {:keys [balance]} (utils/bs->clj body)]
     (and (= balance 0)
          (= status 200))))
 
 (def withdraw-sim
-  {:name "Customers opening accounts simulation"
+  {:name "Customers withdrawing from accounts simulation"
    :scenarios [{:name "Deposit cash money"
                 :steps [{:name "Make account"
                          :request create/make-account}
@@ -37,8 +35,8 @@
 (deftest withdraw-testing
   (testing (str "Withdraw from " data/concurrency " accounts")
     (let [{:keys [ok]}  (clj-gatling/run withdraw-sim {:concurrency data/concurrency :requests data/concurrency})
-          first-account (->> 0                    utils/get-account json/read-str (map utils/k-str->k-keyword) (into {}))
-          last-account  (->> data/concurrency dec utils/get-account json/read-str (map utils/k-str->k-keyword) (into {}))
+          first-account (->> 0                    utils/get-account)
+          last-account  (->> data/concurrency dec utils/get-account)
           n-reqs        (-> withdraw-sim :scenarios first :steps count (* data/concurrency))]
       (is (s/valid? :bank-api.spec/customer-facing-account first-account))
       (is (s/valid? :bank-api.spec/customer-facing-account last-account))
